@@ -48,7 +48,12 @@ export function onMessage(messaging) {
   if (chrome.runtime.onMessage) chrome.runtime.onMessage.addListener(messaging);
 }
 
-export const sendToBg = chrome.runtime.sendMessage;
+export function sendToBg(...args) {
+  if (!window.bgConnection) chrome.runtime.sendMessage(...args);
+  else {
+    window.bgConnection.postMessage(...args);
+  }
+}
 
 export function sendToTab(...args) {
   chrome.tabs.sendMessage(...args);
