@@ -1,4 +1,4 @@
-export function onConnect(respond, connections = {}, tab, error) {
+export function onConnect(init, responses, connections, tab, error) {
   chrome.runtime.onConnect.addListener(function(port) {
     function extensionListener(message) {
       if (message.name === 'init') {
@@ -8,7 +8,11 @@ export function onConnect(respond, connections = {}, tab, error) {
           error(port);
           return;
         }
-        port.postMessage(respond());
+        port.postMessage(init());
+      }
+      else if(responses[message.name]) {
+        const res = responses[message.name](message);
+        if (res) port.postMessage(res);
       }
     }
 
