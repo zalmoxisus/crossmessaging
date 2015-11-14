@@ -1,6 +1,10 @@
 import forIn from 'lodash/object/forIn';
 
 export function onConnect(init, responses, connections, tab, error) {
+  if (typeof connections === 'undefined' && !window.bgConnections) {
+    window.bgConnections = {}; connections = window.bgConnections;
+  }
+  
   chrome.runtime.onConnect.addListener(function(port) {
     function extensionListener(message) {
       if (message.name === 'init') {
@@ -44,6 +48,10 @@ export function sendToTab(...args) {
 }
 
 export function sendToTabs(message, connections) {
+  if (!connections) {
+    if (window.bgConnections) connections = window.bgConnections;
+    else return;
+  }
   forIn(connections, connection => {
     connection.postMessage(message);
   });
