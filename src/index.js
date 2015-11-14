@@ -68,3 +68,8 @@ export function sendToTabs(message, connections) {
     connection.postMessage(message);
   });
 }
+
+export function sendMessage(message) {
+  if (window.bgConnection) window.bgConnection.postMessage(message);
+  else sendToTabs(message);
+}
