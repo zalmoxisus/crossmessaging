@@ -35,7 +35,14 @@ export function onConnect(init, responses, connections, tab, error) {
   });
 }
 
-export const connect = chrome.runtime.connect;
+export function connect(arg) {
+  if (!arg) return chrome.runtime.connect();
+  if (typeof arg === 'boolean' && arg) {
+    window.bgConnection = chrome.runtime.connect();
+    return window.bgConnection;
+  }
+  return chrome.runtime.connect(arg);
+}
 
 export function onMessage(messaging) {
   if (chrome.runtime.onMessage) chrome.runtime.onMessage.addListener(messaging);
