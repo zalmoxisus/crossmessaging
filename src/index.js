@@ -17,6 +17,9 @@ export function onConnect(init, responses, connections, tab, error) {
       else if(responses[message.name]) {
         const res = responses[message.name](message);
         if (res) port.postMessage(res);
+        else if (window.bgConnections) {
+          sendToTabsExcept(message, port, window.bgConnections);
+        }
       }
     }
 
@@ -64,6 +67,14 @@ export function sendToTabs(message, connections) {
   }
   Object.keys(connections).forEach(function(id) {
     connections[id].postMessage(message);
+  });
+}
+
+export function sendToTabsExcept(message, port, connections) {
+  Object.keys(connections).forEach(function(id) {
+    if (connections[id] !== port) {
+      connections[id].postMessage(message);
+    }
   });
 }
 
