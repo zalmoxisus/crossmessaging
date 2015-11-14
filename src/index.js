@@ -2,13 +2,13 @@ export function onConnect(respond, connections = {}, tab, error) {
   chrome.runtime.onConnect.addListener(function(port) {
     function extensionListener(message) {
       if (message.name === 'init') {
-        connections[message.tabId] = port;
+        connections[message.tabId || port.sender.tab.id] = port;
 
         if (tab && message.tabId !== tab.id) {
           error(port);
           return;
         }
-        connections[message.tabId].postMessage(respond());
+        port.postMessage(respond());
       }
     }
 
