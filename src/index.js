@@ -1,3 +1,5 @@
+import forIn from 'lodash/object/forIn';
+
 export function onConnect(init, responses, connections, tab, error) {
   chrome.runtime.onConnect.addListener(function(port) {
     function extensionListener(message) {
@@ -39,4 +41,10 @@ export const sendToBg = chrome.runtime.sendMessage;
 
 export function sendToTab(...args) {
   chrome.tabs.sendMessage(...args);
+}
+
+export function sendToTabs(message, connections) {
+  forIn(connections, connection => {
+    connection.postMessage(message);
+  });
 }
