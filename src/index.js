@@ -1,5 +1,3 @@
-import forIn from 'lodash/object/forIn';
-
 export function onConnect(init, responses, connections, tab, error) {
   if (typeof connections === 'undefined' && !window.bgConnections) {
     window.bgConnections = {}; connections = window.bgConnections;
@@ -64,8 +62,8 @@ export function sendToTabs(message, connections) {
     if (window.bgConnections) connections = window.bgConnections;
     else return;
   }
-  forIn(connections, connection => {
-    connection.postMessage(message);
+  Object.keys(connections).forEach(function(id) {
+    connections[id].postMessage(message);
   });
 }
 
