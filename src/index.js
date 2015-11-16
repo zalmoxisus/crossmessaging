@@ -1,4 +1,4 @@
-export function onConnect(init, responses, connections, tab, error) {
+export function onConnect(init, responses, connections) {
   if (typeof connections === 'undefined' && !window.bgConnections) {
     window.bgConnections = {}; connections = window.bgConnections;
   }
@@ -7,12 +7,7 @@ export function onConnect(init, responses, connections, tab, error) {
     function extensionListener(message) {
       if (message.name === 'init') {
         connections[message.tabId || port.sender.tab.id] = port;
-
-        if (tab && message.tabId !== tab.id) {
-          error(port);
-          return;
-        }
-        port.postMessage(init());
+        port.postMessage(init(message.tabId || port.sender.tab.id));
       }
       else if(responses[message.name]) {
         const res = responses[message.name](message);
