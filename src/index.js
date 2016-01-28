@@ -2,8 +2,8 @@ export function onConnect(init, responses, connections) {
   if (typeof connections === 'undefined' && !window.bgConnections) {
     window.bgConnections = {}; connections = window.bgConnections;
   }
-  
-  chrome.runtime.onConnect.addListener(function(port) {
+
+  function onConnectListener(port) {
     function extensionListener(message) {
       if (message.name === 'init') {
         connections[message.tabId || port.sender.tab.id] = port;
@@ -27,8 +27,10 @@ export function onConnect(init, responses, connections) {
         }
       });
     });
+  }
 
-  });
+  chrome.runtime.onConnect.addListener(onConnectListener);
+  chrome.runtime.onConnectExternal.addListener(onConnectListener);
 }
 
 export function connect(arg) {
@@ -42,6 +44,7 @@ export function connect(arg) {
 
 export function onMessage(messaging) {
   if (chrome.runtime.onMessage) chrome.runtime.onMessage.addListener(messaging);
+  if (chrome.runtime.onMessageExternal) chrome.runtime.onMessageExternal.addListener(messaging);
 }
 
 export function sendToBg(...args) {
