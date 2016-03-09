@@ -21,10 +21,12 @@ export function onConnect(init, responses, connections) {
     port.onMessage.addListener(extensionListener);
     port.onDisconnect.addListener(function(portDiscon) {
       portDiscon.onMessage.removeListener(extensionListener);
-      Object.keys(connections).forEach(function(id) {
+      Object.keys(connections).some(function(id) {
         if (connections[id] === portDiscon) {
           delete connections[id];
+          return true;
         }
+        return false;
       });
     });
   }
