@@ -1,4 +1,4 @@
-export function onConnect(init, responses, connections) {
+export function onConnect(init, responses, connections, onDisconnect) {
   if (typeof connections === 'undefined' && !window.bgConnections) {
     window.bgConnections = {}; connections = window.bgConnections;
   }
@@ -21,6 +21,7 @@ export function onConnect(init, responses, connections) {
     port.onMessage.addListener(extensionListener);
     port.onDisconnect.addListener(function(portDiscon) {
       portDiscon.onMessage.removeListener(extensionListener);
+      if (onDisconnect) onDisconnect(portDiscon);
       Object.keys(connections).some(function(id) {
         if (connections[id] === portDiscon) {
           delete connections[id];
