@@ -10,7 +10,7 @@ export function onConnect(init, responses, connections, onDisconnect) {
         port.postMessage(init(message.tabId || port.sender.tab.id));
       }
       else if(responses[message.name]) {
-        const res = responses[message.name](message);
+        const res = responses[message.name](message, port);
         if (res) port.postMessage(res);
         else if (window.bgConnections) {
           sendToTabsExcept(message, port, window.bgConnections);
