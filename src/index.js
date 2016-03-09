@@ -5,7 +5,7 @@ export function onConnect(init, responses, connections) {
 
   function onConnectListener(port) {
     function extensionListener(message) {
-      if (message.name === 'init') {
+      if (init && message.name === 'init') {
         connections[message.tabId || port.sender.tab.id] = port;
         port.postMessage(init(message.tabId || port.sender.tab.id));
       }
