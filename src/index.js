@@ -33,7 +33,7 @@ export function onConnect(init, responses, connections, onDisconnect) {
   }
 
   chrome.runtime.onConnect.addListener(onConnectListener);
-  chrome.runtime.onConnectExternal.addListener(onConnectListener);
+  if (chrome.runtime.onConnectExternal) chrome.runtime.onConnectExternal.addListener(onConnectListener);
 }
 
 export function connect(arg) {
