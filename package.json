@@ -1,6 +1,6 @@
 {
   "name": "crossmessaging",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Crossextension messaging.",
   "main": "lib/index.js",
   "files": [
